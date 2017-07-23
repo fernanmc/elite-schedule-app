@@ -10,5 +10,7 @@ export class HomePage {
   constructor(public navCtrl: NavController) {
 
   }
-
+  olakase(){
+    console.log("Ola K ase");
+  }
 }
