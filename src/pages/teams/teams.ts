@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import {LoadingController, NavController, NavParams } from 'ionic-angular';
 import {TeamHomePage} from '../pages';
 import {EliteApi} from '../../service/service';
+import * as _ from 'lodash';
+
 
 /**
  * Generated class for the TeamsPage page.
@@ -15,7 +17,10 @@ import {EliteApi} from '../../service/service';
   templateUrl: 'teams.html',
 })
 export class TeamsPage {
+  private allTeams: any;
+  private allTeamDivisions: any;
   teams = [];
+
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams, 
@@ -30,13 +35,21 @@ export class TeamsPage {
             //spinner: 'circle'
     });
 
-     loader.present().then(() =>{
-        this.eliteApi.getTournamentData(selectedTourney.id).subscribe(data=>{
-          this.teams = data.teams;
-        });
-        loader.dismiss();
-     });
+   loader.present().then(() => {
+      this.eliteApi.getTournamentData(selectedTourney.id).subscribe(data => {
+        this.allTeams = data.teams;
+        this.allTeamDivisions =
+            _.chain(data.teams)
+            .groupBy('division')
+            .toPairs()
+            .map(item => _.zipObject(['divisionName', 'divisionTeams'], item))
+            .value();
 
+        this.teams = this.allTeamDivisions;
+        console.log('division teams', this.teams); 
+        loader.dismiss();
+      });
+    });
   
       
    
