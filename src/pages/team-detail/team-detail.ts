@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { ToastController, AlertController, NavController, NavParams } from 'ionic-angular';
+import * as moment from 'moment';
 
 import * as _ from 'lodash';
 import {EliteApi} from '../../service/service';
@@ -18,25 +19,35 @@ import { GamePage } from '../pages';
   templateUrl: 'team-detail.html',
 })
 export class TeamDetailPage {
-
+ 
+ allGames: any[];
  games: any[];
  team: any;
-private tourneyData: any;
+ dateFilter: string;
+ teamStanding: any;
+ private tourneyData: any;
+ useDateFilter = false;
+ isFollowing = false;
 
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
-    public eliteApi: EliteApi
+    public eliteApi: EliteApi,
+    public alertController: AlertController,
+    public toastController: ToastController
     ) {
     this.team = this.navParams.data;
+    this.tourneyData = this.eliteApi.getCurrentTourney();
+
+    this.teamStanding = _.find(this.tourneyData.standings, { 'teamId': this.team.id });
+
     //console.log("navparams" + this.navParams.data);
   }
 
   ionViewDidLoad() {
     this.team = this.navParams.data;
-    this.tourneyData = this.eliteApi.getCurrentTourney();
 
-    this.games = _.chain(this.tourneyData.games)
+     this.games = _.chain(this.tourneyData.games)
                   .filter(g => g.team1Id === this.team.id || g.team2Id === this.team.id)
                   .map(g => {
                       let isTeam1 = (g.team1Id === this.team.id);
@@ -53,7 +64,13 @@ private tourneyData: any;
                       };
                   })
                   .value();
-    console.log('ionViewDidLoad TeamDetailPage');
+    this.allGames = this.games;
+              
+    this.teamStanding = _.find(this.tourneyData.standings, { 'teamId': this.team.id });
+        console.log(typeof(this.teamStanding.wins));
+
+ 
+
   }
 
   getScoreDisplay(isTeam1, team1Score, team2Score) {
@@ -77,4 +94,56 @@ private tourneyData: any;
     this.navCtrl.parent.parent.push(GamePage, sourceGame);
     console.log(sourceGame);
   }
+
+  dateChanged(){
+    if(this.useDateFilter){
+          this.games = _.filter(this.allGames, g => moment(g.time).isSame(this.dateFilter, 'day'));
+    }else{
+        this.games = this.allGames;
+    }
+
+    console.log("Games",this.dateFilter);
+
+  }
+
+  getScoreGame(game){
+    return game.scoreDisplay ? game.scoreDisplay[0]: '';
+  }
+
+  getScoreDisplayBadgeClass(game){
+
+    return game.scoreDisplay.indexOf('W:') === 0 ? 'badge-primary': 'badge-danger';
+  }
+
+  toggleFollow(){
+            console.log("Estoy dentro");
+
+    if(this.isFollowing){
+      let confirm = this.alertController.create({
+        title: "Unfollow?",
+        message:"Are you sure you want unfollow?",
+        buttons:[
+          {
+            text: 'Yes',
+            handler: ()=>{
+              this.isFollowing = false;
+              //TODO: persist data
+              let toast = this.toastController.create({
+                  message: "You have unfollowed this team",
+                  duration: 2000,
+                  position: "bottom"
+                });
+                toast.present();
+            },
+            
+          },
+          {text: "No"}
+        ]
+      });
+      confirm.present();
+    }else{
+      this.isFollowing = true;
+    }
+  }
+
 }
