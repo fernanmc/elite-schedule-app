@@ -4,17 +4,16 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { HttpModule} from '@angular/http';
 
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
 import { MyTeamsPage, TournamentsPage,TeamsPage,TeamDetailPage, StandingsPage, TeamHomePage,GamePage } from '../pages/pages';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { IonicStorageModule } from '@ionic/storage';
+import {UserSettings, EliteApi} from '../service/service';
+
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage,
-    ListPage,
     MyTeamsPage,
     TournamentsPage,
     TeamsPage,
@@ -27,12 +26,11 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     BrowserModule,
     HttpModule,
     IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage,
-    ListPage,
     MyTeamsPage,
     TournamentsPage,
     TeamsPage,
@@ -44,6 +42,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   providers: [
     StatusBar,
     SplashScreen,
+    UserSettings,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

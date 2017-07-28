@@ -6,7 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 //import { HomePage } from '../pages/home/home';
 //import { ListPage } from '../pages/list/list';
 import {MyTeamsPage, TournamentsPage} from '../pages/pages';
-import {EliteApi} from '../service/elite-api.service';
+import {UserSettings, EliteApi} from '../service/service';
 
 @Component({
   templateUrl: 'app.html',
