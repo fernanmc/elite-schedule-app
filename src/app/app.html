@@ -12,6 +12,12 @@
         {{p.title}}
       </button>
     </ion-list>
+     <ion-list>
+      <ion-list-header>Teams Favorites</ion-list-header>
+      <button menuClose ion-item *ngFor="let team of teams" (click)="goToTeam($event,team)">
+        {{team.team.name}}
+      </button>
+    </ion-list>
   </ion-content>
 
 </ion-menu>

@@ -1,6 +1,6 @@
 import { UserSettings, EliteApi } from './../../service/service';
 import { Component } from '@angular/core';
-import {LoadingController, NavController, NavParams } from 'ionic-angular';
+import { LoadingController, NavController, NavParams, Events } from 'ionic-angular';
 import {TeamHomePage, TournamentsPage} from '../pages';
 
 /**
@@ -33,9 +33,11 @@ export class MyTeamsPage {
   constructor(public navCtrl: NavController, 
            public navParams: NavParams,
            public eliteApi: EliteApi,
+           public events: Events,
            public userSettings : UserSettings,
            public  LoadingController: LoadingController) {
-              this.favorites = this.userSettings.getAllFavorites();
+
+                this.favorites = this.userSettings.getAllFavorites();
               
   }
 
