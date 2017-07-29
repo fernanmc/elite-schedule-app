@@ -20,6 +20,7 @@ export class TeamsPage {
   private allTeams: any;
   private allTeamDivisions: any;
   teams = [];
+  queryText: String;
 
   constructor(
     public navCtrl: NavController, 
@@ -58,4 +59,18 @@ export class TeamsPage {
   itemTapped($event, team){
     this.navCtrl.push(TeamHomePage, team);
   }
+
+    updateTeams(){
+    let queryTextLower = this.queryText.toLowerCase();
+    let filteredTeams = [];
+    _.forEach(this.allTeamDivisions, td => { //filtrar equipos por el texto introduciodo en el buscador usando lodash
+      let teams = _.filter(td.divisionTeams, t => (<any>t).name.toLowerCase().includes(queryTextLower));
+      if (teams.length) {
+        filteredTeams.push({ divisionName: td.divisionName, divisionTeams: teams });
+      }
+    });
+
+    this.teams = filteredTeams;
+  }
+
 }
