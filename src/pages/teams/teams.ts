@@ -63,11 +63,11 @@ export class TeamsPage {
     updateTeams(){
     let queryTextLower = this.queryText.toLowerCase();
     let filteredTeams = [];
+    let teams=[];
     _.forEach(this.allTeamDivisions, td => { //filtrar equipos por el texto introduciodo en el buscador usando lodash
-      let teams = _.filter(td.divisionTeams, t => (<any>t).name.toLowerCase().includes(queryTextLower));
-      if (teams.length) {
-        filteredTeams.push({ divisionName: td.divisionName, divisionTeams: teams });
-      }
+       teams = _.filter(td.divisionTeams, t => (<any>t).name.toLowerCase().includes(queryTextLower));
+       filteredTeams.push({ divisionName: td.divisionName, divisionTeams: teams });
+      
     });
 
     this.teams = filteredTeams;

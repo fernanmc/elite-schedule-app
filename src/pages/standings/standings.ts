@@ -18,6 +18,7 @@ export class StandingsPage {
   allStandings: any [];
   standings: any [];
   team: any;
+  divisionfilter='division';
 
   constructor(
     public navCtrl: NavController, 
@@ -28,15 +29,37 @@ export class StandingsPage {
     this.team = this.navParams.data;
     let tourneyData = this.eliteApi.getCurrentTourney();
     this.standings = tourneyData.standings;
-    this.allStandings =
+   // this.divisionfilter='division';
+
+
+    /*this.allStandings =
             _.chain(this.standings)
             .groupBy('division')
             .toPairs()
             .map(item => _.zipObject(['divisionName', 'divisionTeams'], item))
-            .value();
-    
+            .value();*/
+    this.allStandings = tourneyData.standings;
     console.log('standings', this.standings);
-    console.log('division standings', this.allStandings);
+   
+  }
+
+ divisionFilter(){
+      if(this.divisionfilter ==='all'){
+        console.log(this.divisionFilter);
+        this.standings = this.allStandings;
+         console.log('division standings', this.allStandings);
+      }else{
+        this.standings = _.filter(this.allStandings, s=>s.division===this.team.division);
+         console.log(this.divisionFilter);
+      }
+  }
+
+  getHeader(record, recordIndex, records){ //dividiendo por vistual scroll
+    if (recordIndex === 0 || record.division !== records[recordIndex-1].division) {
+
+      return record.division;
+    }
+    return null;  
   }
 
 }

@@ -15,11 +15,11 @@
                 </ion-col>
                 <ion-col width-50 text-right>
                   
-                   <button primary outline (click)="toggleFollow()" *ngIf="!isFollowing">
+                   <button ion-button primary outline (click)="toggleFollow()" *ngIf="!isFollowing">
                         <ion-icon name="star"></ion-icon>
                         Add Favorite
                     </button>
-                    <button primary (click)="toggleFollow()" *ngIf="isFollowing" color="primary">
+                    <button ion-button primary (click)="toggleFollow()" *ngIf="isFollowing" color="primary">
                         <ion-icon name="star"></ion-icon>
                     </button>
                 </ion-col>
